@@ -4,7 +4,7 @@ for i,v in pairs(workspace:GetDescendants()) do print(v)
 	if v.ClassName == "Part" then
 		if v.Shape == Enum.PartType.Ball then
 			local p = Instance.new("Part",workspace)
-			p.CanCollide = false
+			p.CanCollide = true
 			p.Anchored = true
 			p.Transparency = 0.7
 			p.Position = v.Position
