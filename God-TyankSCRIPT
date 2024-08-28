@@ -32,7 +32,8 @@ while task.wait(4) do
 		local con = false
 		local s,e = pcall(function()
 			local path:Path = game:GetService("PathfindingService"):CreatePath({Costs = {
-				DangerZone = math.huge
+				DangerZone = math.huge,
+				Grass = 1
 			}})
 			path:ComputeAsync(game.Players.LocalPlayer.Character:GetPivot().Position,v.Position)
 			print(path.Status)
