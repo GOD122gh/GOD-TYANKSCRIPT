@@ -1,0 +1,66 @@
+task.wait(3)
+local deadz = {}
+for i,v in pairs(workspace:GetDescendants()) do print(v)
+	if v.ClassName == "Part" then
+		if v.Shape == Enum.PartType.Ball then
+			local p = Instance.new("Part",workspace)
+			p.CanCollide = false
+			p.Anchored = true
+			p.Transparency = 0.7
+			p.Position = v.Position
+			p.Size = v.Size
+			p.Color = Color3.new(1, 0, 0)
+			v.CanCollide = false
+			table.insert(deadz,p)
+			local p = Instance.new("PathfindingModifier",p)
+			local pp = Instance.new("PathfindingModifier",v)
+			p.Label = "DangerZone"
+			pp.Label = "DangerZone"
+		end
+	end
+end
+while task.wait(4) do
+	local p = workspace:GetChildren()
+	local kolpaki228 = {}
+	for i,v in pairs(p) do
+		if v.Name == "-bddurka2024" then
+			table.insert(kolpaki228,v)
+		end
+	end
+	local nearest:Part = nil 
+	for i,v:Part in pairs(kolpaki228) do
+		local con = false
+		local s,e = pcall(function()
+			local path:Path = game:GetService("PathfindingService"):CreatePath({Costs = {
+				DangerZone = math.huge
+			}})
+			path:ComputeAsync(game.Players.LocalPlayer.Character:GetPivot().Position,v.Position)
+			print(path.Status)
+			if path.Status == Enum.PathStatus.Success then con = true end
+		end)
+		if con then
+		if nearest == nil then
+			nearest = v
+		elseif (game.Players.LocalPlayer.Character:GetPivot().Position-v.Position).Magnitude < (game.Players.LocalPlayer.Character:GetPivot().Position-nearest.Position).Magnitude then
+			nearest = v
+		end
+		end
+	end
+	local path:Path = game:GetService("PathfindingService"):CreatePath({})
+	local s,e = pcall(function()
+		path:ComputeAsync(game.Players.LocalPlayer.Character:GetPivot().Position,nearest.Position)
+	end)
+	if s then
+		local wayp = path:GetWaypoints()
+		local h = game.Players.LocalPlayer.Character.Humanoid
+		for i,v:PathWaypoint in pairs(wayp) do
+			h:MoveTo(v.Position)
+			h.MoveToFinished:wait()
+		end
+		pcall(function()
+		for i=1, 100 do
+			game.ReplicatedStorage.rems.events.server.Gameplay:FireServer(3, i, nearest)
+		end
+		end)
+	end
+end
