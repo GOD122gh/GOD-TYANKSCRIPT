@@ -10,7 +10,7 @@ for i,v in pairs(workspace:GetDescendants()) do print(v)
 			p.Position = v.Position
 			p.Size = v.Size
 			p.Color = Color3.new(1, 0, 0)
-			v.CanCollide = false
+			v.CanCollide = true
 			table.insert(deadz,p)
 			local p = Instance.new("PathfindingModifier",p)
 			local pp = Instance.new("PathfindingModifier",v)
